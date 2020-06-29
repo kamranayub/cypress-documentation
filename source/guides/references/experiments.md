@@ -16,7 +16,7 @@ Option | Default | Description
 ----- | ---- | ----
 `experimentalGetCookiesSameSite` | `false` | Adds `sameSite` values to the objects yielded from {% url "`cy.setCookie()`" setcookie %}, {% url "`cy.getCookie()`" getcookie %}, and {% url "`cy.getCookies()`" getcookies %}. This will become the default behavior in a later Cypress version.
 `experimentalComponentTesting` | `false` | Enables component testing using framework-specific adaptors. See {% urlHash "Component Testing" Component-Testing %} for more detail.
-`experimentalFetchPolyfill` | `false` | Automatically replaces `window.fetch` with a polyfill that Cypress can spy on and stub.
+`experimentalFetchPolyfill` | `false` | Automatically replaces `window.fetch` with a polyfill that Cypress can spy on and stub. See {% urlHash "Fetch Polyfill" Fetch-Polyfill %} for more details.
 `experimentalSourceRewriting` | `false` | Enables AST-based JS/HTML rewriting. This may fix issues caused by the existing regex-based JS/HTML replacement algorithm. See {% issue 5273 %} for details.
 `experimentalShadowDomSupport` | `false` | Enables shadow DOM support. Adds the `cy.shadow()` command and the `includeShadowDom` option to some DOM commands. See {% urlHash "Shadow DOM" Shadow-DOM %} for more detail.
 
@@ -124,6 +124,14 @@ cy.get('.container .my-button', { includeShadowDom: true })
 ```
 
 In the selector `.container .my-button`, the first part (`.container`) exists in the light DOM and the second part (`.my-button`) exists in the shadow DOM. This will not find the button element. Instead, you can use one of the methods in the above examples.
+
+# Fetch Polyfill
+
+You can enable spying and stubbing of `fetch()` requests by setting the `experimentalFetchPolyfill` configuration to `true`. This will force `fetch()` calls to use XHR, which can be handled normally by Cypress. See {% url "Network Requests" network-requests %} for details.
+
+## Web Worker and Service Worker Scopes
+
+This experiment does not handle `fetch()` calls initiated by workers. This is due to the different scopes `fetch()` is available in. The experiment only switches out the implementation for the Window scope. See [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) for more information about what scopes `fetch()` is available in.
 
 {% history %}
 {% url "4.9.0" changelog#4-9-0 %} | Added support for `experimentalFetchPolyfill`.
